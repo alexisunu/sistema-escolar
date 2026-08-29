@@ -1,0 +1,35 @@
+<div class="container">
+  <h2>{{ modoEdicion ? 'Editar estudiante' : 'Nuevo estudiante' }}</h2>
+  <p class="page-subtitle">{{ modoEdicion ? 'Actualiza los datos del estudiante.' : 'Completa los datos para registrar un nuevo estudiante.' }}</p>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <form class="card" (ngSubmit)="guardar()" #form="ngForm">
+    <div class="campo">
+      <label>Nombre</label>
+      <input type="text" name="nombre" [(ngModel)]="estudiante.nombre" required>
+    </div>
+
+    <div class="campo">
+      <label>Apellido</label>
+      <input type="text" name="apellido" [(ngModel)]="estudiante.apellido" required>
+    </div>
+
+    <div class="campo">
+      <label>Email</label>
+      <input type="email" name="email" [(ngModel)]="estudiante.email" required>
+    </div>
+
+    <div class="campo">
+      <label>Fecha de nacimiento</label>
+      <input type="date" name="fechaNacimiento" [(ngModel)]="estudiante.fechaNacimiento">
+    </div>
+
+    <div class="acciones">
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid || guardando">
+        {{ guardando ? 'Guardando...' : 'Guardar' }}
+      </button>
+      <button type="button" class="btn" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

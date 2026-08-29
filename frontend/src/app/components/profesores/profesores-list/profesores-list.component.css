@@ -1,0 +1,68 @@
+.container {
+  padding: 2.25rem 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.card {
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.7rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.88rem;
+}
+
+th {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.col-id {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.col-acciones {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.col-acciones .btn {
+  margin-left: 0.4rem;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: var(--color-bg-subtle);
+}
+
+.estado-vacio {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.estado-vacio p {
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}

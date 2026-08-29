@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="header">
+    <div>
+      <h2>Materias</h2>
+      <p class="page-subtitle">Gestiona el catálogo de materias disponibles.</p>
+    </div>
+    <button class="btn btn-primary" (click)="nuevaMateria()">Nueva materia</button>
+  </div>
+
+  <p *ngIf="cargando">Cargando...</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <div class="card" *ngIf="!cargando && materias.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Créditos</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of materias">
+          <td class="col-id">{{ m.id }}</td>
+          <td>{{ m.nombre }}</td>
+          <td>{{ m.descripcion }}</td>
+          <td>{{ m.creditos }}</td>
+          <td class="col-acciones">
+            <button class="btn btn-small" (click)="editarMateria(m.id)">Editar</button>
+            <button class="btn btn-small btn-danger" (click)="eliminarMateria(m.id)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card estado-vacio" *ngIf="!cargando && materias.length === 0 && !error">
+    <p>No hay materias registradas todavía.</p>
+    <button class="btn btn-primary" (click)="nuevaMateria()">Registrar la primera</button>
+  </div>
+</div>

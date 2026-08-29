@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="header">
+    <div>
+      <h2>Estudiantes</h2>
+      <p class="page-subtitle">Gestiona la información de los estudiantes registrados.</p>
+    </div>
+    <button class="btn btn-primary" (click)="nuevoEstudiante()">Nuevo estudiante</button>
+  </div>
+
+  <p *ngIf="cargando">Cargando...</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <div class="card" *ngIf="!cargando && estudiantes.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Email</th>
+          <th>Fecha de nacimiento</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of estudiantes">
+          <td class="col-id">{{ e.id }}</td>
+          <td>{{ e.nombre }}</td>
+          <td>{{ e.apellido }}</td>
+          <td>{{ e.email }}</td>
+          <td>{{ e.fechaNacimiento }}</td>
+          <td class="col-acciones">
+            <button class="btn btn-small" (click)="editarEstudiante(e.id)">Editar</button>
+            <button class="btn btn-small btn-danger" (click)="eliminarEstudiante(e.id)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card estado-vacio" *ngIf="!cargando && estudiantes.length === 0 && !error">
+    <p>No hay estudiantes registrados todavía.</p>
+    <button class="btn btn-primary" (click)="nuevoEstudiante()">Registrar el primero</button>
+  </div>
+</div>

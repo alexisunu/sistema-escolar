@@ -1,0 +1,20 @@
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">SE</span>
+      <span class="brand-text">Sistema Escolar</span>
+    </div>
+    <nav class="nav">
+      <a routerLink="/estudiantes" routerLinkActive="activo">Estudiantes</a>
+      <a routerLink="/profesores" routerLinkActive="activo">Profesores</a>
+      <a routerLink="/materias" routerLinkActive="activo">Materias</a>
+      <a routerLink="/asignaciones" routerLinkActive="activo">Asignaciones</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+  <div class="page-enter">
+    <router-outlet></router-outlet>
+  </div>
+</main>

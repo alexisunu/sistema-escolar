@@ -1,0 +1,30 @@
+<div class="container">
+  <h2>{{ modoEdicion ? 'Editar materia' : 'Nueva materia' }}</h2>
+  <p class="page-subtitle">{{ modoEdicion ? 'Actualiza los datos de la materia.' : 'Completa los datos para registrar una nueva materia.' }}</p>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <form class="card" (ngSubmit)="guardar()" #form="ngForm">
+    <div class="campo">
+      <label>Nombre</label>
+      <input type="text" name="nombre" [(ngModel)]="materia.nombre" required>
+    </div>
+
+    <div class="campo">
+      <label>Descripción</label>
+      <textarea name="descripcion" [(ngModel)]="materia.descripcion" rows="3"></textarea>
+    </div>
+
+    <div class="campo">
+      <label>Créditos</label>
+      <input type="number" name="creditos" [(ngModel)]="materia.creditos" min="0">
+    </div>
+
+    <div class="acciones">
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid || guardando">
+        {{ guardando ? 'Guardando...' : 'Guardar' }}
+      </button>
+      <button type="button" class="btn" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>
