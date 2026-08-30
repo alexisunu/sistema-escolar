@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/profesores")
-@CrossOrigin(origins = "http://<IP_LAN_PC3>")
 public class ProfesorController {
 
     @Autowired

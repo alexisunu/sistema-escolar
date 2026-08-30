@@ -12,7 +12,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/asignaciones")
-@CrossOrigin(origins = "http://<IP_LAN_PC3>")
 public class AsignacionController {
 
     @Autowired
