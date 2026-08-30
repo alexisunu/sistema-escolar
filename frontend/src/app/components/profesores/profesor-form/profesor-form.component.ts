@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Profesor } from '../../../models/profesor.model';
 import { ProfesorService } from '../../../services/profesor.service';
@@ -24,7 +24,8 @@ export class ProfesorFormComponent implements OnInit {
   constructor(
     private profesorService: ProfesorService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -32,8 +33,14 @@ export class ProfesorFormComponent implements OnInit {
     if (id) {
       this.modoEdicion = true;
       this.profesorService.getProfesor(+id).subscribe({
-        next: (data) => (this.profesor = data),
-        error: () => (this.error = 'No se pudo cargar el profesor.')
+        next: (data) => {
+          this.profesor = data;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.error = 'No se pudo cargar el profesor.';
+          this.cdr.detectChanges();
+        }
       });
     }
   }
@@ -51,6 +58,7 @@ export class ProfesorFormComponent implements OnInit {
       error: () => {
         this.error = 'No se pudo guardar el profesor.';
         this.guardando = false;
+        this.cdr.detectChanges();
       }
     });
   }

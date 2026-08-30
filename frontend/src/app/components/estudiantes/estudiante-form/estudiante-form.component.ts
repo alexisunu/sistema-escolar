@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Estudiante } from '../../../models/estudiante.model';
 import { EstudianteService } from '../../../services/estudiante.service';
@@ -24,7 +24,8 @@ export class EstudianteFormComponent implements OnInit {
   constructor(
     private estudianteService: EstudianteService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -32,8 +33,14 @@ export class EstudianteFormComponent implements OnInit {
     if (id) {
       this.modoEdicion = true;
       this.estudianteService.getEstudiante(+id).subscribe({
-        next: (data) => (this.estudiante = data),
-        error: () => (this.error = 'No se pudo cargar el estudiante.')
+        next: (data) => {
+          this.estudiante = data;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.error = 'No se pudo cargar el estudiante.';
+          this.cdr.detectChanges();
+        }
       });
     }
   }
@@ -51,6 +58,7 @@ export class EstudianteFormComponent implements OnInit {
       error: () => {
         this.error = 'No se pudo guardar el estudiante.';
         this.guardando = false;
+        this.cdr.detectChanges();
       }
     });
   }

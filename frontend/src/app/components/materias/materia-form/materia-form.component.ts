@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Materia } from '../../../models/materia.model';
 import { MateriaService } from '../../../services/materia.service';
@@ -23,7 +23,8 @@ export class MateriaFormComponent implements OnInit {
   constructor(
     private materiaService: MateriaService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -31,8 +32,14 @@ export class MateriaFormComponent implements OnInit {
     if (id) {
       this.modoEdicion = true;
       this.materiaService.getMateria(+id).subscribe({
-        next: (data) => (this.materia = data),
-        error: () => (this.error = 'No se pudo cargar la materia.')
+        next: (data) => {
+          this.materia = data;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.error = 'No se pudo cargar la materia.';
+          this.cdr.detectChanges();
+        }
       });
     }
   }
@@ -50,6 +57,7 @@ export class MateriaFormComponent implements OnInit {
       error: () => {
         this.error = 'No se pudo guardar la materia.';
         this.guardando = false;
+        this.cdr.detectChanges();
       }
     });
   }

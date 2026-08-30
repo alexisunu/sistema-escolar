@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Materia } from '../../../models/materia.model';
 import { MateriaService } from '../../../services/materia.service';
@@ -16,7 +16,8 @@ export class MateriasListComponent implements OnInit {
 
   constructor(
     private materiaService: MateriaService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -30,10 +31,12 @@ export class MateriasListComponent implements OnInit {
       next: (data) => {
         this.materias = data;
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudo cargar la lista de materias. Verifica que el backend esté disponible.';
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -54,7 +57,10 @@ export class MateriasListComponent implements OnInit {
 
     this.materiaService.eliminarMateria(id).subscribe({
       next: () => this.cargarMaterias(),
-      error: () => (this.error = 'No se pudo eliminar la materia.')
+      error: () => {
+        this.error = 'No se pudo eliminar la materia.';
+        this.cdr.detectChanges();
+      }
     });
   }
 }

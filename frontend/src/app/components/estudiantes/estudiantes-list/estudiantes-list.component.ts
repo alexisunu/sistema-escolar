@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Estudiante } from '../../../models/estudiante.model';
 import { EstudianteService } from '../../../services/estudiante.service';
@@ -16,7 +16,8 @@ export class EstudiantesListComponent implements OnInit {
 
   constructor(
     private estudianteService: EstudianteService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -30,10 +31,12 @@ export class EstudiantesListComponent implements OnInit {
       next: (data) => {
         this.estudiantes = data;
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudo cargar la lista de estudiantes. Verifica que el backend esté disponible.';
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -54,7 +57,10 @@ export class EstudiantesListComponent implements OnInit {
 
     this.estudianteService.eliminarEstudiante(id).subscribe({
       next: () => this.cargarEstudiantes(),
-      error: () => (this.error = 'No se pudo eliminar el estudiante.')
+      error: () => {
+        this.error = 'No se pudo eliminar el estudiante.';
+        this.cdr.detectChanges();
+      }
     });
   }
 }

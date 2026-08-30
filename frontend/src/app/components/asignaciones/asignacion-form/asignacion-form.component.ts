@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Estudiante } from '../../../models/estudiante.model';
 import { Profesor } from '../../../models/profesor.model';
 import { Materia } from '../../../models/materia.model';
@@ -35,18 +35,28 @@ export class AsignacionFormComponent implements OnInit {
     private estudianteService: EstudianteService,
     private profesorService: ProfesorService,
     private materiaService: MateriaService,
-    private asignacionService: AsignacionService
+    private asignacionService: AsignacionService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.estudianteService.getEstudiantes().subscribe({
-      next: (data) => (this.estudiantes = data)
+      next: (data) => {
+        this.estudiantes = data;
+        this.cdr.detectChanges();
+      }
     });
     this.profesorService.getProfesores().subscribe({
-      next: (data) => (this.profesores = data)
+      next: (data) => {
+        this.profesores = data;
+        this.cdr.detectChanges();
+      }
     });
     this.materiaService.getMaterias().subscribe({
-      next: (data) => (this.materias = data)
+      next: (data) => {
+        this.materias = data;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -58,8 +68,14 @@ export class AsignacionFormComponent implements OnInit {
       return;
     }
     this.asignacionService.getMateriasDeEstudiante(this.estudianteSeleccionado).subscribe({
-      next: (data) => (this.materiasDelEstudiante = data),
-      error: () => (this.error = 'No se pudieron cargar las materias del estudiante.')
+      next: (data) => {
+        this.materiasDelEstudiante = data;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.error = 'No se pudieron cargar las materias del estudiante.';
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -81,7 +97,10 @@ export class AsignacionFormComponent implements OnInit {
           this.mensaje = 'Materia asignada al estudiante correctamente.';
           this.cargarMateriasDelEstudiante();
         },
-        error: () => (this.error = 'No se pudo asignar la materia al estudiante.')
+        error: () => {
+          this.error = 'No se pudo asignar la materia al estudiante.';
+          this.cdr.detectChanges();
+        }
       });
   }
 
@@ -89,7 +108,10 @@ export class AsignacionFormComponent implements OnInit {
     if (asignacionId == null) return;
     this.asignacionService.quitarAsignacionEstudiante(asignacionId).subscribe({
       next: () => this.cargarMateriasDelEstudiante(),
-      error: () => (this.error = 'No se pudo quitar la asignación.')
+      error: () => {
+        this.error = 'No se pudo quitar la asignación.';
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -101,8 +123,14 @@ export class AsignacionFormComponent implements OnInit {
       return;
     }
     this.asignacionService.getMateriasDeProfesor(this.profesorSeleccionado).subscribe({
-      next: (data) => (this.materiasDelProfesor = data),
-      error: () => (this.error = 'No se pudieron cargar las materias del profesor.')
+      next: (data) => {
+        this.materiasDelProfesor = data;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.error = 'No se pudieron cargar las materias del profesor.';
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -124,7 +152,10 @@ export class AsignacionFormComponent implements OnInit {
           this.mensaje = 'Materia asignada al profesor correctamente.';
           this.cargarMateriasDelProfesor();
         },
-        error: () => (this.error = 'No se pudo asignar la materia al profesor.')
+        error: () => {
+          this.error = 'No se pudo asignar la materia al profesor.';
+          this.cdr.detectChanges();
+        }
       });
   }
 
@@ -132,7 +163,10 @@ export class AsignacionFormComponent implements OnInit {
     if (asignacionId == null) return;
     this.asignacionService.quitarAsignacionProfesor(asignacionId).subscribe({
       next: () => this.cargarMateriasDelProfesor(),
-      error: () => (this.error = 'No se pudo quitar la asignación.')
+      error: () => {
+        this.error = 'No se pudo quitar la asignación.';
+        this.cdr.detectChanges();
+      }
     });
   }
 }
