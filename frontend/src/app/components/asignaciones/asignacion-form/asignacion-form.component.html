@@ -1,6 +1,6 @@
 <div class="container">
   <h2>Asignaciones</h2>
-  <p class="page-subtitle">Asigna materias a estudiantes y profesores.</p>
+  <p class="page-subtitle">Busca por ID y asigna materias a estudiantes y profesores.</p>
 
   <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
   <p class="error" *ngIf="error">{{ error }}</p>
@@ -8,12 +8,25 @@
   <section class="card bloque">
     <h3>Asignar materia a estudiante</h3>
 
-    <div class="fila">
-      <select [(ngModel)]="estudianteSeleccionado" (ngModelChange)="cargarMateriasDelEstudiante()">
-        <option [ngValue]="null">Selecciona estudiante</option>
-        <option *ngFor="let e of estudiantes" [ngValue]="e.id">{{ e.nombre }} {{ e.apellido }}</option>
-      </select>
+    <div class="fila-busqueda">
+      <input
+        type="text"
+        inputmode="numeric"
+        placeholder="ID del estudiante"
+        [(ngModel)]="idBusquedaEstudiante"
+        (keyup.enter)="buscarEstudiante()"
+        autocomplete="off">
+      <button class="btn" (click)="buscarEstudiante()">Buscar</button>
+    </div>
 
+    <p class="error-inline" *ngIf="errorBusquedaEstudiante">{{ errorBusquedaEstudiante }}</p>
+
+    <div class="encontrado" *ngIf="estudianteEncontrado">
+      <span class="encontrado-nombre">{{ estudianteEncontrado.nombre }} {{ estudianteEncontrado.apellido }}</span>
+      <span class="encontrado-detalle">{{ estudianteEncontrado.email }}</span>
+    </div>
+
+    <div class="fila" *ngIf="estudianteEncontrado">
       <select [(ngModel)]="materiaParaEstudiante">
         <option [ngValue]="null">Selecciona materia</option>
         <option *ngFor="let m of materias" [ngValue]="m.id">{{ m.nombre }}</option>
@@ -28,7 +41,7 @@
         <button class="btn btn-small btn-danger" (click)="quitarAsignacionEstudiante(m.id)">Quitar</button>
       </li>
     </ul>
-    <p class="ayuda" *ngIf="estudianteSeleccionado && materiasDelEstudiante.length === 0">
+    <p class="ayuda" *ngIf="estudianteEncontrado && materiasDelEstudiante.length === 0">
       Este estudiante no tiene materias asignadas.
     </p>
   </section>
@@ -36,12 +49,25 @@
   <section class="card bloque">
     <h3>Asignar materia a profesor</h3>
 
-    <div class="fila">
-      <select [(ngModel)]="profesorSeleccionado" (ngModelChange)="cargarMateriasDelProfesor()">
-        <option [ngValue]="null">Selecciona profesor</option>
-        <option *ngFor="let p of profesores" [ngValue]="p.id">{{ p.nombre }} {{ p.apellido }}</option>
-      </select>
+    <div class="fila-busqueda">
+      <input
+        type="text"
+        inputmode="numeric"
+        placeholder="ID del profesor"
+        [(ngModel)]="idBusquedaProfesor"
+        (keyup.enter)="buscarProfesor()"
+        autocomplete="off">
+      <button class="btn" (click)="buscarProfesor()">Buscar</button>
+    </div>
 
+    <p class="error-inline" *ngIf="errorBusquedaProfesor">{{ errorBusquedaProfesor }}</p>
+
+    <div class="encontrado" *ngIf="profesorEncontrado">
+      <span class="encontrado-nombre">{{ profesorEncontrado.nombre }} {{ profesorEncontrado.apellido }}</span>
+      <span class="encontrado-detalle">{{ profesorEncontrado.especialidad }}</span>
+    </div>
+
+    <div class="fila" *ngIf="profesorEncontrado">
       <select [(ngModel)]="materiaParaProfesor">
         <option [ngValue]="null">Selecciona materia</option>
         <option *ngFor="let m of materias" [ngValue]="m.id">{{ m.nombre }}</option>
@@ -56,7 +82,7 @@
         <button class="btn btn-small btn-danger" (click)="quitarAsignacionProfesor(m.id)">Quitar</button>
       </li>
     </ul>
-    <p class="ayuda" *ngIf="profesorSeleccionado && materiasDelProfesor.length === 0">
+    <p class="ayuda" *ngIf="profesorEncontrado && materiasDelProfesor.length === 0">
       Este profesor no tiene materias asignadas.
     </p>
   </section>

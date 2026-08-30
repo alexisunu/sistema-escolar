@@ -13,6 +13,7 @@ export class ProfesoresListComponent implements OnInit {
   profesores: Profesor[] = [];
   cargando = false;
   error = '';
+  filtroId = '';
 
   constructor(
     private profesorService: ProfesorService,
@@ -22,6 +23,14 @@ export class ProfesoresListComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarProfesores();
+  }
+
+  get profesoresFiltrados(): Profesor[] {
+    const filtro = this.filtroId.trim();
+    if (!filtro) {
+      return this.profesores;
+    }
+    return this.profesores.filter((p) => String(p.id ?? '').includes(filtro));
   }
 
   cargarProfesores(): void {

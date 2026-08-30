@@ -7,10 +7,21 @@
     <button class="btn btn-primary" (click)="nuevaMateria()">Nueva materia</button>
   </div>
 
+  <div class="buscador">
+    <label for="filtroId">Buscar por ID</label>
+    <input
+      id="filtroId"
+      type="text"
+      inputmode="numeric"
+      placeholder="Ej: 12"
+      [(ngModel)]="filtroId"
+      autocomplete="off">
+  </div>
+
   <p *ngIf="cargando">Cargando...</p>
   <p class="error" *ngIf="error">{{ error }}</p>
 
-  <div class="card" *ngIf="!cargando && materias.length > 0">
+  <div class="card" *ngIf="!cargando && materiasFiltradas.length > 0">
     <table>
       <thead>
         <tr>
@@ -22,7 +33,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let m of materias">
+        <tr *ngFor="let m of materiasFiltradas">
           <td class="col-id">{{ m.id }}</td>
           <td>{{ m.nombre }}</td>
           <td>{{ m.descripcion }}</td>
@@ -39,5 +50,9 @@
   <div class="card estado-vacio" *ngIf="!cargando && materias.length === 0 && !error">
     <p>No hay materias registradas todavía.</p>
     <button class="btn btn-primary" (click)="nuevaMateria()">Registrar la primera</button>
+  </div>
+
+  <div class="card estado-vacio" *ngIf="!cargando && materias.length > 0 && materiasFiltradas.length === 0">
+    <p>No se encontró ninguna materia con ese ID.</p>
   </div>
 </div>

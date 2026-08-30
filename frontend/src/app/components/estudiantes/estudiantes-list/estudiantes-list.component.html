@@ -7,10 +7,21 @@
     <button class="btn btn-primary" (click)="nuevoEstudiante()">Nuevo estudiante</button>
   </div>
 
+  <div class="buscador">
+    <label for="filtroId">Buscar por ID</label>
+    <input
+      id="filtroId"
+      type="text"
+      inputmode="numeric"
+      placeholder="Ej: 12"
+      [(ngModel)]="filtroId"
+      autocomplete="off">
+  </div>
+
   <p *ngIf="cargando">Cargando...</p>
   <p class="error" *ngIf="error">{{ error }}</p>
 
-  <div class="card" *ngIf="!cargando && estudiantes.length > 0">
+  <div class="card" *ngIf="!cargando && estudiantesFiltrados.length > 0">
     <table>
       <thead>
         <tr>
@@ -23,7 +34,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let e of estudiantes">
+        <tr *ngFor="let e of estudiantesFiltrados">
           <td class="col-id">{{ e.id }}</td>
           <td>{{ e.nombre }}</td>
           <td>{{ e.apellido }}</td>
@@ -41,5 +52,9 @@
   <div class="card estado-vacio" *ngIf="!cargando && estudiantes.length === 0 && !error">
     <p>No hay estudiantes registrados todavía.</p>
     <button class="btn btn-primary" (click)="nuevoEstudiante()">Registrar el primero</button>
+  </div>
+
+  <div class="card estado-vacio" *ngIf="!cargando && estudiantes.length > 0 && estudiantesFiltrados.length === 0">
+    <p>No se encontró ningún estudiante con ese ID.</p>
   </div>
 </div>

@@ -14,17 +14,19 @@ import { AsignacionService } from '../../../services/asignacion.service';
   styleUrls: ['./asignacion-form.component.css']
 })
 export class AsignacionFormComponent implements OnInit {
-  estudiantes: Estudiante[] = [];
-  profesores: Profesor[] = [];
   materias: Materia[] = [];
 
-  // Estudiante <-> Materia
-  estudianteSeleccionado: number | null = null;
+  // --- Estudiante <-> Materia ---
+  idBusquedaEstudiante: string = '';
+  estudianteEncontrado: Estudiante | null = null;
+  errorBusquedaEstudiante = '';
   materiaParaEstudiante: number | null = null;
   materiasDelEstudiante: Materia[] = [];
 
-  // Profesor <-> Materia
-  profesorSeleccionado: number | null = null;
+  // --- Profesor <-> Materia ---
+  idBusquedaProfesor: string = '';
+  profesorEncontrado: Profesor | null = null;
+  errorBusquedaProfesor = '';
   materiaParaProfesor: number | null = null;
   materiasDelProfesor: Materia[] = [];
 
@@ -40,18 +42,6 @@ export class AsignacionFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.estudianteService.getEstudiantes().subscribe({
-      next: (data) => {
-        this.estudiantes = data;
-        this.cdr.detectChanges();
-      }
-    });
-    this.profesorService.getProfesores().subscribe({
-      next: (data) => {
-        this.profesores = data;
-        this.cdr.detectChanges();
-      }
-    });
     this.materiaService.getMaterias().subscribe({
       next: (data) => {
         this.materias = data;
@@ -60,14 +50,35 @@ export class AsignacionFormComponent implements OnInit {
     });
   }
 
-  // --- Estudiante <-> Materia ---
+  // --- Buscar estudiante por ID ---
 
-  cargarMateriasDelEstudiante(): void {
-    if (this.estudianteSeleccionado == null) {
-      this.materiasDelEstudiante = [];
+  buscarEstudiante(): void {
+    this.errorBusquedaEstudiante = '';
+    this.estudianteEncontrado = null;
+    this.materiasDelEstudiante = [];
+
+    const id = Number(this.idBusquedaEstudiante);
+    if (!this.idBusquedaEstudiante || isNaN(id)) {
+      this.errorBusquedaEstudiante = 'Ingresa un ID válido.';
       return;
     }
-    this.asignacionService.getMateriasDeEstudiante(this.estudianteSeleccionado).subscribe({
+
+    this.estudianteService.getEstudiante(id).subscribe({
+      next: (data) => {
+        this.estudianteEncontrado = data;
+        this.cdr.detectChanges();
+        this.cargarMateriasDelEstudiante();
+      },
+      error: () => {
+        this.errorBusquedaEstudiante = 'No se encontró ningún estudiante con ese ID.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  cargarMateriasDelEstudiante(): void {
+    if (this.estudianteEncontrado?.id == null) return;
+    this.asignacionService.getMateriasDeEstudiante(this.estudianteEncontrado.id).subscribe({
       next: (data) => {
         this.materiasDelEstudiante = data;
         this.cdr.detectChanges();
@@ -82,14 +93,14 @@ export class AsignacionFormComponent implements OnInit {
   asignarMateriaAEstudiante(): void {
     this.error = '';
     this.mensaje = '';
-    if (this.estudianteSeleccionado == null || this.materiaParaEstudiante == null) {
-      this.error = 'Selecciona un estudiante y una materia.';
+    if (this.estudianteEncontrado?.id == null || this.materiaParaEstudiante == null) {
+      this.error = 'Busca un estudiante válido y selecciona una materia.';
       return;
     }
 
     this.asignacionService
       .asignarMateriaEstudiante({
-        estudianteId: this.estudianteSeleccionado,
+        estudianteId: this.estudianteEncontrado.id,
         materiaId: this.materiaParaEstudiante
       })
       .subscribe({
@@ -115,14 +126,35 @@ export class AsignacionFormComponent implements OnInit {
     });
   }
 
-  // --- Profesor <-> Materia ---
+  // --- Buscar profesor por ID ---
 
-  cargarMateriasDelProfesor(): void {
-    if (this.profesorSeleccionado == null) {
-      this.materiasDelProfesor = [];
+  buscarProfesor(): void {
+    this.errorBusquedaProfesor = '';
+    this.profesorEncontrado = null;
+    this.materiasDelProfesor = [];
+
+    const id = Number(this.idBusquedaProfesor);
+    if (!this.idBusquedaProfesor || isNaN(id)) {
+      this.errorBusquedaProfesor = 'Ingresa un ID válido.';
       return;
     }
-    this.asignacionService.getMateriasDeProfesor(this.profesorSeleccionado).subscribe({
+
+    this.profesorService.getProfesor(id).subscribe({
+      next: (data) => {
+        this.profesorEncontrado = data;
+        this.cdr.detectChanges();
+        this.cargarMateriasDelProfesor();
+      },
+      error: () => {
+        this.errorBusquedaProfesor = 'No se encontró ningún profesor con ese ID.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  cargarMateriasDelProfesor(): void {
+    if (this.profesorEncontrado?.id == null) return;
+    this.asignacionService.getMateriasDeProfesor(this.profesorEncontrado.id).subscribe({
       next: (data) => {
         this.materiasDelProfesor = data;
         this.cdr.detectChanges();
@@ -137,14 +169,14 @@ export class AsignacionFormComponent implements OnInit {
   asignarMateriaAProfesor(): void {
     this.error = '';
     this.mensaje = '';
-    if (this.profesorSeleccionado == null || this.materiaParaProfesor == null) {
-      this.error = 'Selecciona un profesor y una materia.';
+    if (this.profesorEncontrado?.id == null || this.materiaParaProfesor == null) {
+      this.error = 'Busca un profesor válido y selecciona una materia.';
       return;
     }
 
     this.asignacionService
       .asignarMateriaProfesor({
-        profesorId: this.profesorSeleccionado,
+        profesorId: this.profesorEncontrado.id,
         materiaId: this.materiaParaProfesor
       })
       .subscribe({

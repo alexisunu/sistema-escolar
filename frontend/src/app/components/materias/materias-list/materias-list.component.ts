@@ -13,6 +13,7 @@ export class MateriasListComponent implements OnInit {
   materias: Materia[] = [];
   cargando = false;
   error = '';
+  filtroId = '';
 
   constructor(
     private materiaService: MateriaService,
@@ -22,6 +23,14 @@ export class MateriasListComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarMaterias();
+  }
+
+  get materiasFiltradas(): Materia[] {
+    const filtro = this.filtroId.trim();
+    if (!filtro) {
+      return this.materias;
+    }
+    return this.materias.filter((m) => String(m.id ?? '').includes(filtro));
   }
 
   cargarMaterias(): void {
