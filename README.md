@@ -1,6 +1,6 @@
 # Sistema Escolar — Proyecto Final
 
-Backend (Java + Spring Boot) + Frontend (Angular) + Base de datos (MySQL), desplegado en tres computadores (PC-1 BD, PC-2 backend, PC-3 frontend) dentro de la misma LAN.
+Backend (Java + Spring Boot) + Frontend (Angular) + Base de datos (MySQL), desplegado en dos computadores (PC-1 BD, PC-2 backend y frontend) dentro de la misma LAN.
 
 Este repositorio contiene solo la **configuración base** de cada proyecto (dependencias, conexión a la BD, routing, HttpClient) — las entidades, controllers, servicios y componentes los desarrolla cada quien según el reparto del equipo.
 
